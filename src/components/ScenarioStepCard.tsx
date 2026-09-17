@@ -130,9 +130,7 @@ function ScenarioStepCard({ domainId, step, completed, onToggleComplete }: Props
               <p className="font-mono text-[11px] tracking-[0.1em] text-text-secondary">
                 PROMPT · 복사해서 채팅창에 붙여넣기
               </p>
-              <p className="font-mono text-sm leading-relaxed text-text-secondary">
-                {step.prompt}
-              </p>
+              <p className="font-mono text-sm leading-relaxed text-text-secondary">{step.prompt}</p>
             </div>
 
             {/* 확인 포인트 — 실제로 읽고 검증해야 하는 내용이라 가장 눈에 띄게: 밝은 본문색 + 블루→퍼플 라인 강조 */}
