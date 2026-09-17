@@ -1,0 +1,275 @@
+/**
+ * docs/demo-scenarios.md(v2, 원본 재사용 기반)의 표를 그대로 옮긴 데이터.
+ * 원본 사이트(7단계)의 실제 프롬프트/확인 포인트/첨부파일 원문을 그대로 재사용하면서
+ * 3~4단계로 압축한 버전. 첨부파일은 public/demo-data/<domainId>/ 아래에 원본 그대로 있음.
+ * 콘텐츠가 바뀌면 docs/demo-scenarios.md를 다시 확인해서 동기화할 것.
+ */
+
+export type ScenarioStep = {
+  step: number
+  title: string
+  prompt: string
+  attachments: string[]
+  expectedResult: string
+  isWow?: boolean
+}
+
+export type DomainScenario = {
+  domainId: string
+  steps: ScenarioStep[]
+}
+
+export const scenarios: DomainScenario[] = [
+  {
+    domainId: 'manufacturing',
+    steps: [
+      {
+        step: 1,
+        title: '실시간 스마트 팩토리 총괄 인터랙티브 대시보드 구축',
+        prompt:
+          '평택 및 울산 공장의 설비 가동 상태, 위험 설비 현황, 부품 재고 및 정비 비용 지표를 한눈에 모니터링할 수 있도록 웹 브라우저에서 직접 열어보고 클릭하며 조작할 수 있는 경영진용 인터랙티브 관제 대시보드를 구축해 주십시오.',
+        attachments: [],
+        expectedResult:
+          '채팅창 요약이 아니라 브라우저에서 실제로 드릴다운 가능한 호스팅 대시보드 URL이 생성되는지 확인.',
+      },
+      {
+        step: 2,
+        title: '부서 간 데이터 교차 감사 및 숨겨진 비용 누수 적발 (WOW)',
+        prompt:
+          '최근 생산 현장의 설비 이상 마모 진단 보고서와 사내 구매 시스템의 협력사 단가표 및 과거 정비 지시 데이터를 정밀 교차 대조해 주십시오. 생산부서와 구매부서 간 데이터 단절로 인해 발생한 가장 심각한 잠재 재무 리스크와 부서 간 규정 위반 사례가 무엇인지 밝혀내십시오.',
+        attachments: [
+          'equipment_wear_investigation_report.pdf',
+          'supplier_parts_price_catalog.xlsx',
+        ],
+        expectedResult:
+          '외부 파일과 내부 BigQuery 데이터를 조인하여, 부서 단절로 숨겨져 있던 재무 리스크를 스스로 적발하는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 3,
+        title: '현장 수기 전표 OCR 판독 및 지능형 품목 매핑 (Vision & HITL)',
+        prompt:
+          '울산 제2공장에서 긴급 접수된 현장 수기 전표 사진을 정밀 판독하십시오. 기재된 각 부품 항목을 개별 라인별로 분해하고 마스터 DB 및 공급사 카탈로그와 대조하여 규격 이상이나 단종 품목 여부를 확인한 뒤, 적정 대체 부품과 소요 비용을 산출하여 운영 관제 콘솔에 반영해 주십시오.',
+        attachments: [
+          'handwritten_maintenance_order_ulsan.jpg',
+          'handwritten_maintenance_order_pyeongtaek.jpg',
+        ],
+        expectedResult:
+          '수기 이미지를 라인 단위로 분해하고, 승인이 필요한 건에 대해 A2UI 승인 카드를 제시한 뒤 콘솔 상태를 변경하는지 확인.',
+      },
+      {
+        step: 4,
+        title: '글로벌 원자재 트렌드 결합 전사 예지보전 종합 전략 수립 (Finale)',
+        prompt:
+          "최근 1년간의 설비별 고장 패턴과 유지보수 비용 데이터를 종합 분석함과 동시에, 현재 인터넷 웹상에서 최신 글로벌 베어링강, 특수합금, 유압 부품 원자재 가격 동향 및 물류 리스크를 실시간 리서치하십시오. 이를 결합하여 향후 6개월간의 '설비 예지보전 및 선제적 부품 조달 최적화 전략 보고서'를 작성하고, 이번 프로세스 혁신을 통해 달성한 다운타임 단축 및 비용 절감 성과를 정량 수치로 총괄 요약해 주십시오.",
+        attachments: [],
+        expectedResult:
+          '실시간 웹 리서치 결과와 내부 BigQuery 통계를 융합하여 이사회 보고 수준의 완결된 전략 보고서를 산출하는지 확인.',
+      },
+    ],
+  },
+  {
+    domainId: 'finance',
+    steps: [
+      {
+        step: 1,
+        title: '리테일 건전성 및 세그먼트 인터랙티브 대시보드',
+        prompt:
+          '경영진 회의에서 실시간으로 클릭해 탐색할 수 있는 브라우저용 인터랙티브 대시보드를 생성해 주세요. 고객 세그먼트별 평균 DSR 현황, LTV 상승률 분포, 영업점별 자산 현황, 그리고 현재 리스크 임계값을 초과해 마케팅이 보류된 고위험군 현황을 한눈에 조망할 수 있어야 합니다.',
+        attachments: [],
+        expectedResult:
+          '세그먼트 필터와 드릴다운이 실제로 동작하는 웹 대시보드가 렌더링되는지 확인.',
+      },
+      {
+        step: 2,
+        title: '외부 제휴 리드와 내부 리스크 데이터 교차 감사 (WOW)',
+        prompt:
+          '최근 제휴 플랫폼을 통해 유입된 마케팅 타겟 고객 리스트와 금융감독원 행정지도 가이드라인을 내부 고객 행동 데이터와 긴밀히 대조해 보십시오. 마케팅부에서 LTV가 높다고 자동 발송을 추진 중인 대상 중, 감독당국 규제 임계값을 위반하거나 부서 간 데이터 불일치가 존재하는 중대한 미추적 잠재 위험 사례를 색출해 주세요.',
+        attachments: [
+          'marketing_campaign_external_leads.xlsx',
+          'fss_retail_lending_guidelines_2026.pdf',
+        ],
+        expectedResult:
+          '제휴 리드 파일 · 감독당국 가이드라인 · 내부 행동 로그 3중 대조로 규제 위반 후보를 색출하는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 3,
+        title: '영업점 보완 서류 판독 및 리스크 승인 워크플로우 (Vision & HITL)',
+        prompt:
+          '강남PB센터에서 CUST_0012 고객의 비대면 대환대출 보완 신청서가 스캔되어 접수되었습니다. 서류 이미지를 정밀 판독하여 고객 마스터 및 최신 행동 로그와 대조하고, DSR 재산정 결과에 따른 적격 여부를 판정한 뒤 리스크 관리부 승인을 위한 워크플로우 승인 카드를 제시하고 콘솔에 반영해 주세요.',
+        attachments: ['handwritten_branch_doc_cust0012.jpg', 'handwritten_branch_doc_cust0025.jpg'],
+        expectedResult:
+          'DSR을 재산정하여 자율 종결하지 않고 리스크 관리부 승인 카드를 띄운 뒤, 원클릭 승인으로 상태가 전이되는지 확인.',
+      },
+      {
+        step: 4,
+        title: '거시경제 동향 결합 초개인화 플랫폼 종합 개편 전략 (Finale)',
+        prompt:
+          "웹 검색을 통해 2026년 하반기 한국은행 기준금리 전망, 경쟁 시중은행(신한, KB 등)의 청년 특판 금리 현황, 그리고 최근 가계대출 규제 가이드라인을 심층 리서치해 주십시오. 이를 당행의 연령대별 자산/LTV 데이터와 종합 결합하여, 건전성을 엄격히 유지하면서도 2030 청년층 전환율을 20% 이상 끌어올릴 수 있는 '초개인화 상품 추천 전략 개편안'을 이사회 보고용 완성형 PDF 브리핑 보고서로 작성해 주세요. 보고서 말미에는 오늘 우리가 진행한 부서 간 협업 워크플로우의 정량적 성과를 반드시 총괄 결산하여 포함해야 합니다.",
+        attachments: ['fss_retail_lending_guidelines_2026.pdf'],
+        expectedResult:
+          '실시간 금리·경쟁사 리서치와 내부 연령대별 데이터를 융합하고, 데모 전체의 정량 성과를 결산하여 PDF로 완결하는지 확인. (첨부는 2단계와 동일 파일 재사용)',
+      },
+    ],
+  },
+  {
+    domainId: 'retail',
+    steps: [
+      {
+        step: 1,
+        title: '경영진용 인터랙티브 공급망 총괄 대시보드',
+        prompt:
+          'CEO인 내가 웹 브라우저에서 직접 열고 탐색할 수 있는 인터랙티브 경영진 대시보드를 생성해 줘. 주요 협력사별 납기준수율, 공정 결함률, 단가 변동률 추이와 함께 즉각 조치가 필요한 위험 부품 목록을 한눈에 볼 수 있어야 해.',
+        attachments: [],
+        expectedResult:
+          '정적 텍스트가 아니라 브라우저에서 인터랙티브하게 드릴다운할 수 있는 웹 기반 대시보드가 성공적으로 열리는지 확인.',
+      },
+      {
+        step: 2,
+        title: '현장 수기 야장 판독 및 시스템 교차 감사 (WOW, Vision 겸함)',
+        prompt:
+          '울산1공장에서 검사관이 수기로 급히 작성한 입고 품질 야장 기록을 시각 판독하고, 이를 내부 발주 및 검사 데이터와 교차 검증해 줘. 은폐되거나 축소 보고된 품질 결함이나 라인 위험이 있는지 찾아내서 보고해 줘.',
+        attachments: [
+          'ulsan1_incoming_inspection_field_log.jpg',
+          'ulsan_quality_defect_special_audit.pdf',
+          'jeonju_chassis_defect_verdict.jpg',
+        ],
+        expectedResult:
+          '수기 검사표의 PART-104 불합격 24건(하우징 미세균열)을 인식하고, BigQuery 내 대원정밀의 발주 PO-2026-4402 및 INSP-2026-881 결함과 연결하여 이상 징후를 적발하는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 3,
+        title: '글로벌 원자재 리서치 연계 전사 협상 전략 패키지 완성 (Finale)',
+        prompt:
+          "인터넷에서 최신 글로벌 알루미늄 및 특수강 가격 동향, 자동차 부품 하도급 공정거래 규제를 실시간 리서치하고, 우리 회사의 협력사별 납품·결함·비용 데이터와 교차 분석해 줘. 대원정밀과 한일오토텍을 상대로 관철할 '공급업체별 맞춤형 단가 인하 협상 시나리오 및 이사회 브리핑 리포트'를 작성해 줘.",
+        attachments: ['supplier_price_increase_settlement_2026q3.xlsx'],
+        expectedResult:
+          '실시간 웹 리서치 정보와 BigQuery 및 엑셀 정산 명세서를 교차 결합하여 완결된 전략 리포트를 도출하고, 클레임 상계액·절감액 등 정량 효과를 제시하는지 확인.',
+      },
+    ],
+  },
+  {
+    domainId: 'it-devops',
+    steps: [
+      {
+        step: 1,
+        title: '운영 데이터 카탈로그 탐색 및 대화형 관제 대시보드 구축',
+        prompt:
+          '현재 우리 시스템에 등록된 고객사 현황, 네트워크 장비 인벤토리, 최근 발생한 장애 티켓과 텔레메트리 로그 데이터의 전체 구조를 파악해 줘. 그리고 웹 브라우저에서 직접 열어보고 클릭하면서 인터랙티브하게 탐색할 수 있는 총괄 운영 대시보드를 생성해 줘.',
+        attachments: [],
+        expectedResult:
+          '데이터 카탈로그 메타데이터를 우선 검토한 후 핵심 지표와 장비별 가동 현황을 시각화한 브라우저 인터랙티브 대시보드를 즉시 렌더링하는지 확인.',
+      },
+      {
+        step: 2,
+        title: '비전 OCR 판독 및 외부 감사 로그 교차 분석 (WOW, Vision 겸함)',
+        prompt:
+          '현장에서 업로드된 긴급 작업 일지 사진과 최근 통신사 회선 감사 보고서를 우리 내부 운영 기록과 교차 대조해 줘. 현장 전표에 수기로 적힌 에러 코드와 측정 손실률을 판독하여, 현재 내부 데이터베이스와 불일치하거나 심각한 트래픽 위협을 유발하는 숨겨진 문제를 찾아내 줘.',
+        attachments: [
+          'handwritten_noc_dispatch_sheet_01.jpg',
+          'handwritten_noc_dispatch_sheet_02.jpg',
+          'external_telemetry_vendor_audit_log.xlsx',
+        ],
+        expectedResult:
+          '수기 전표의 DEV-1008 장비 ERR-OSPF-999(구형 코드)와 8.4% 패킷 손실률을 정확히 읽어내고, 외부 회선 감사 로그 및 BigQuery 티켓과 조인하여 심각성을 밝혀내는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 3,
+        title: '글로벌 보안 취약점 심층 리서치 및 전사 대응 마스터플랜 (Finale)',
+        prompt:
+          "인터넷 최신 보안 동향에서 시스코 및 주니퍼 라우터의 최신 제로데이 취약점과 BGP 데몬 결함 사례를 검색하고, 우리 BigQuery 데이터에 기록된 실제 장애 이력과 결합하여 '차세대 AI 기반 네트워크 예방 정비 마스터 플랜'을 수립해 줘.",
+        attachments: ['vendor_vulnerability_and_core_incident_audit.pdf'],
+        expectedResult:
+          '웹 리서치와 내부 BigQuery 장애 통계를 융합하여 정량적 ROI가 포함된 종합 계획서를 완성하는지 확인.',
+      },
+    ],
+  },
+  {
+    domainId: 'media',
+    steps: [
+      {
+        step: 1,
+        title: '미디어 파이프라인 종합 대시보드 구축 및 현황 점검',
+        prompt:
+          '브라우저에서 직접 열어서 클릭하고 탐색할 수 있는 임원진용 인터랙티브 대시보드를 제작해 줘. 최근 90일간 배급 관리 시스템에 반입된 마스터 영상 자산의 전체 현황과 주요 장르별 분포, 그리고 각 부서별 파이프라인 병목 지표를 한눈에 볼 수 있어야 해.',
+        attachments: [],
+        expectedResult:
+          '장르별 분포와 부서별 병목 지표를 드릴다운할 수 있는 실제 호스팅 대시보드가 열리는지 확인.',
+      },
+      {
+        step: 2,
+        title: '외부 감사 보고서 및 마스터 DB 교차 검증 (WOW)',
+        prompt:
+          '이번 분기 외부 감사 보고서와 외주 제작사 라이센싱 명세서 파일을 검토해서, 우리 내부 마스터 데이터베이스와 일치하지 않는 가장 심각한 잠재적 저작권 분쟁 리스크가 무엇인지 밝혀내 줘.',
+        attachments: [
+          'global_ott_licensing_audit_q3.pdf',
+          'external_licensing_royalty_manifest.xlsx',
+        ],
+        expectedResult:
+          '외부 감사 보고서 · 라이센싱 명세서 · 내부 마스터 DB 3자를 대조하여 최대 분쟁 리스크를 단정적으로 지목하는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 3,
+        title: '수기 음악 큐시트 비전 판독 및 라인별 저작권 검수 (Vision & HITL)',
+        prompt:
+          '케이프로덕션에서 제출한 수기 음악 큐시트 스캔본을 정밀 판독해 줘. 각 트랙 라인별로 곡명과 라이선스 번호를 추출하여 내부 계약 데이터와 대조하고, 폐기되거나 문제가 있는 항목에 대해 법무팀과 편집팀이 선택할 수 있는 조치 카드를 제시한 후 검토 대기 상태를 업데이트해 줘.',
+        attachments: [
+          'handwritten_music_cue_sheet_task1.jpg',
+          'handwritten_music_cue_sheet_task2.jpg',
+        ],
+        expectedResult:
+          '큐시트를 트랙 라인 단위로 분해하여 A2UI 배치 편집 폼으로 표출하고, 조치 선택 후 상태가 갱신되는지 확인.',
+      },
+      {
+        step: 4,
+        title: '글로벌 OTT 규제 변화 자율 리서치 및 라이브러리 수익성 전략 보고서 (Finale)',
+        prompt:
+          '최근 글로벌 스트리밍 플랫폼들의 AI 생성 콘텐츠 규제 및 음원 저작권 정산 개편 동향을 웹에서 심층 조사해 줘. 이를 우리 내부 마스터 라이브러리의 장르별 매출 데이터와 결합 분석하여, 이번 데모 과정에서 해결된 처리 시간 단축 성과와 부서 간 핸드오프 결과를 포함한 임원진용 종합 전략 보고서 및 PDF를 작성해 줘.',
+        attachments: [],
+        expectedResult:
+          '글로벌 규제 리서치와 장르별 매출 데이터를 결합하고, 데모 전 과정의 처리시간 단축 성과를 결산한 PDF를 산출하는지 확인.',
+      },
+    ],
+  },
+  {
+    domainId: 'public-sector',
+    steps: [
+      {
+        step: 1,
+        title: '일일 세목 원장 대조 및 잠재 회계 리스크 적발 (WOW)',
+        prompt:
+          '오늘 아침 공유된 일일 감사 보고서를 우리 행정 운영 데이터베이스의 실제 접수 원장과 교차 대조하여, 부서 간 시스템 연계에서 누락되거나 왜곡된 가장 심각한 재무·행정 리스크가 무엇인지 밝혀내 줘.',
+        attachments: ['daily_audit_and_tax_reconciliation.pdf', 'kiosk_offline_filings_sync.xlsx'],
+        expectedResult:
+          '외부 PDF 보고서에 기재된 APP-2026-0814 및 APP-2026-0829를 데이터베이스와 크로스체크하여 세액 과소납부 및 시금고 결제 취소 건을 정밀하게 교차 적발하는지 확인.',
+        isWow: true,
+      },
+      {
+        step: 2,
+        title: '다국어 수기 허가 서류 정밀 판독 및 라인별 분해 심사 (Vision & HITL)',
+        prompt:
+          '무인 키오스크를 통해 새로 접수된 수기 인허가 신청서 이미지를 읽고 분석해 줘. 전체 서류를 뭉뚱그려 처리하지 말고 신청된 허가 항목을 개별 라인 단위로 정밀하게 분해한 뒤, 우리 조례 마스터 규정과 대조하여 적격 여부와 납부 세액의 타당성을 즉시 검토해 줘.',
+        attachments: ['handwritten_permit_doc1.jpg', 'handwritten_permit_doc2.jpg'],
+        expectedResult:
+          '수기 이미지 내 다중 행(PRM-002, PRM-005 및 과거 폐지 코드 OLD-ARC-99)을 개별 행으로 분해하여 A2UI 배치 편집 폼으로 표출하고 추천 조례 매핑을 제시하는지 확인.',
+      },
+      {
+        step: 3,
+        title: '다문화 지자체 공공서비스 혁신 종합 전략서 자율 수립 (Finale)',
+        prompt:
+          '최신 국내외 공공기관의 AI 스마트민원 도입 성공 사례 및 다문화 거주민 지원 정책 동향을 웹에서 폭넓게 리서치하고, 이를 우리 스마트민원센터의 지난 3개월간 다국어 민원 데이터와 결합해 줘. 우리 지자체 인허가 리드타임이 48시간에서 어떻게 단축될 수 있었는지에 대한 정량적 성과 결산과, 향후 분기별 외국인 맞춤형 행정 서비스 및 스마트 예산 최적화 종합 실행 계획서를 구청장 보고용 고품질 PDF 보고서로 자율 완성해 줘.',
+        attachments: [],
+        expectedResult:
+          '외부 웹 실시간 검색 결과와 지자체 내부 트랜잭션 지표(처리시간 단축률, 언어별 만족도 등)를 융합하여 구청장 직속 보고 수준의 완결된 PDF 실행 계획서를 최종 산출물로 반환하는지 확인.',
+      },
+    ],
+  },
+]
+
+export function getScenario(domainId: string): DomainScenario | undefined {
+  return scenarios.find((scenario) => scenario.domainId === domainId)
+}

@@ -1,1 +1,199 @@
 @import 'tailwindcss';
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+
+@theme {
+  --color-brand-black: #000000;
+  --color-brand-blue: #414aff;
+  --color-brand-purple: #8920ff;
+  --color-brand-green: #34ad5c;
+
+  --color-surface-0: #08080a;
+  --color-surface-1: #121216;
+  --color-surface-2: #1b1b21;
+  --color-border: #2a2a33;
+
+  --color-text-primary: #f2f2f5;
+  --color-text-secondary: #97979f;
+
+  /* 한글/영문/숫자 전부 Pretendard 하나로 통일 — font-mono도 같은 패밀리를 쓴다(진짜 고정폭은 아니지만 서로 다른 폰트가 섞여 보이는 걸 막는 게 목적) */
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-surface-0);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+/*
+ * 홈 히어로의 3D 유리 스파클 — docs/design/hero-ref.png 수준의 실제 유리 굴절/색분산은 CSS로는
+ * 낼 수 없어서 React Three Fiber(WebGL)로 렌더링한다(src/components/HeroGlassSparkle.tsx).
+ * 히어로 섹션 하단에 꽉 차게 배경으로 깔리는 큰 레이어라, 캔버스 픽셀 경계 자체가 잘림선이
+ * 되지 않도록 오브젝트가 절대 닿지 않을 만큼 넉넉하게 잡는다(정사각형, 뷰포트 폭 기준).
+ */
+.hero-sparkle-scene {
+  width: min(92vw, 860px);
+  height: min(92vw, 860px);
+  margin-inline: auto;
+}
+
+/*
+ * 도메인 카드 마우스 틸트 + 스포트라이트 효과.
+ * 원본 사이트(#domains, .dcard)를 그대로 재현: 카드마다 --c1/--c2 두 색을 주면
+ * 호버 시 그 색으로 된 그라데이션 테두리(::before)와 마우스를 따라다니는
+ * 라디얼 글로우(::after)가 나타나고, 마우스 위치에 따라 3D로 살짝 기울어진다.
+ * --mx/--my/transform은 TiltCard가 JS로 직접 style을 세팅한다(리렌더 없이).
+ */
+.tilt-card {
+  position: relative;
+  /* 마우스가 가장자리로 가면 ::after 스포트라이트(정사각형)가 카드의 둥근 모서리 밖으로
+     삐져나와 보이는 문제가 있었다 — overflow:hidden으로 카드 모양대로 잘라낸다. */
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+
+.tilt-card:hover {
+  border-color: transparent;
+  /* 아래로만 크게 퍼지는 그림자(0 40px 90px -30px)였더니 overflow:hidden으로도 못 잘리는
+     자기 자신의 box-shadow가 아래쪽 카드에서만 삐져나와 보였다 — 사방으로 고르게 퍼지는
+     작은 글로우로 교체(오프셋 0, 블러도 줄임). */
+  box-shadow: 0 0 45px -12px color-mix(in srgb, var(--c1) 55%, transparent);
+}
+
+.tilt-card::before,
+.tilt-card::after {
+  content: '';
+  position: absolute;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.tilt-card::before {
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(140deg, var(--c1), transparent 42%, transparent 62%, var(--c2));
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.tilt-card::after {
+  top: var(--my, 50%);
+  left: var(--mx, 50%);
+  width: 320px;
+  height: 320px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--c1) 26%, transparent),
+    transparent 66%
+  );
+}
+
+.tilt-card:hover::before,
+.tilt-card:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card {
+    transition: none;
+  }
+}
+
+/*
+ * 전역 배경 그라데이션 — position:fixed라서 페이지를 아무리 스크롤해도 뷰포트에 그대로 붙어있다
+ * (원본 사이트 #domains의 .bg-field와 동일한 방식). 보라를 메인으로, 블루/그린을 보조로 섞었다.
+ * AppLayout 한 곳에만 넣어서 홈 · /architecture · /experience · /playground/:id 전부에 적용된다.
+ */
+.bg-field {
+  background:
+    radial-gradient(
+      900px 620px at 15% -8%,
+      color-mix(in srgb, var(--color-brand-purple) 38%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 540px at 88% 6%,
+      color-mix(in srgb, var(--color-brand-blue) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 700px at 50% 106%,
+      color-mix(in srgb, var(--color-brand-green) 14%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      1200px 900px at 50% 40%,
+      color-mix(in srgb, var(--color-brand-purple) 12%, transparent),
+      transparent 70%
+    ),
+    var(--color-surface-0);
+}
+
+/*
+ * 상단 탭바의 물방울 인디케이터. 위치/폭은 AppLayout이 JS로 재서 인라인 style로 넣고,
+ * left/width 전환에 탄성 있는 cubic-bezier(오버슈트)를 줘서 액체처럼 늘어나며 이동하는 느낌을 내고,
+ * 동시에 스케일을 짧게 눌렀다 펴서(찌그러짐) 물방울이 튕기는 느낌을 더한다.
+ */
+.nav-blob {
+  /* 탭 하나 폭(56px 정도)이라 색이 3개면 너무 정신없어 보임 — 블루→퍼플 2색만, 채도도 낮춰서 은은하게 */
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-brand-blue) 70%, white 10%),
+    color-mix(in srgb, var(--color-brand-purple) 70%, white 10%)
+  );
+  box-shadow: 0 3px 14px -6px color-mix(in srgb, var(--color-brand-purple) 40%, transparent);
+  transition:
+    left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-blob-squish {
+  animation: nav-blob-squish-kf 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes nav-blob-squish-kf {
+  0% {
+    transform: scaleY(1) scaleX(1);
+  }
+  30% {
+    transform: scaleY(0.7) scaleX(1.2);
+  }
+  60% {
+    transform: scaleY(1.1) scaleX(0.92);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-blob {
+    transition: none;
+  }
+  .nav-blob-squish {
+    animation: none;
+  }
+}
+
+/* 가로 스크롤 캐러셀에서 스크롤바를 안 보이게 한다(스크롤 기능은 그대로 유지) */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
