@@ -31,15 +31,88 @@ body {
 }
 
 /*
- * 홈 히어로의 3D 유리 스파클 — docs/design/hero-ref.png 수준의 실제 유리 굴절/색분산은 CSS로는
- * 낼 수 없어서 React Three Fiber(WebGL)로 렌더링한다(src/components/HeroGlassSparkle.tsx).
- * 히어로 섹션 하단에 꽉 차게 배경으로 깔리는 큰 레이어라, 캔버스 픽셀 경계 자체가 잘림선이
- * 되지 않도록 오브젝트가 절대 닿지 않을 만큼 넉넉하게 잡는다(정사각형, 뷰포트 폭 기준).
+ * 홈 히어로 배경의 오로라 블롭 — 브랜드 3색(블루/퍼플/그린) 라디얼 그라데이션 덩어리 3개를
+ * 강하게 블러 처리하고 border-radius/위치를 천천히 모핑시켜서 은은하게 일렁이는 느낌을 낸다.
+ * 창 하단보다 살짝 아래(bottom 음수)로 내려서 위쪽 절반만 살짝 걸치듯 보이게 하고,
+ * 텍스트보다 z-index를 낮춰 뒤로 보내며 pointer-events는 꺼서 버튼 클릭을 막지 않는다.
  */
-.hero-sparkle-scene {
-  width: min(92vw, 860px);
-  height: min(92vw, 860px);
-  margin-inline: auto;
+.hero-aurora {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -20%;
+  height: min(75vh, 740px);
+  z-index: 0;
+  overflow: visible;
+  filter: blur(80px);
+}
+
+.hero-aurora-blob {
+  position: absolute;
+  width: 68%;
+  height: 85%;
+  opacity: 0.5;
+  animation:
+    hero-aurora-morph 12s ease-in-out infinite,
+    hero-aurora-drift 14s ease-in-out infinite;
+}
+
+.hero-aurora-blob--blue {
+  left: -15%;
+  bottom: 0;
+  background: radial-gradient(circle at 40% 40%, var(--color-brand-blue), transparent 70%);
+  animation-delay:
+    0s,
+    -6s;
+}
+
+.hero-aurora-blob--purple {
+  left: 24%;
+  bottom: 4%;
+  background: radial-gradient(circle at 55% 45%, var(--color-brand-purple), transparent 70%);
+  animation-delay:
+    -8s,
+    -16s;
+}
+
+.hero-aurora-blob--green {
+  right: -20%;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, var(--color-brand-green), transparent 70%);
+  animation-delay:
+    -16s,
+    -24s;
+}
+
+@keyframes hero-aurora-morph {
+  0%,
+  100% {
+    border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  }
+  25% {
+    border-radius: 60% 40% 30% 70% / 55% 65% 35% 45%;
+  }
+  50% {
+    border-radius: 35% 65% 55% 45% / 40% 50% 50% 60%;
+  }
+  75% {
+    border-radius: 55% 45% 40% 60% / 60% 35% 65% 40%;
+  }
+}
+
+@keyframes hero-aurora-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(0, -34%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora-blob {
+    animation: none;
+  }
 }
 
 /*
