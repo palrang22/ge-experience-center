@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import AgentChatCard from '@/components/AgentChatCard'
 import ScenarioStepCard from '@/components/ScenarioStepCard'
+import SplitViewGuideModal from '@/components/SplitViewGuideModal'
 import { domains, type Domain } from '@/data/domains'
 import { openChatPane } from '@/lib/chatPane'
 import { getScenario } from '@/data/scenarios'
@@ -32,6 +33,7 @@ function PlaygroundScenario({ domain }: { domain: Domain }) {
   const scenario = getScenario(domain.id)
   const totalSteps = scenario?.steps.length ?? 0
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
+  const [guideOpen, setGuideOpen] = useState(false)
   const progress = totalSteps ? (completedSteps.size / totalSteps) * 100 : 0
 
   function toggleStep(step: number) {
@@ -52,11 +54,17 @@ function PlaygroundScenario({ domain }: { domain: Domain }) {
 
   return (
     <section className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-10 lg:flex-row lg:items-start lg:gap-10">
-      {/* 왼쪽 사이드바 — /experience 도메인 카드와 동일한 디자인, CTA만 "에이전트 채팅 시작"으로 교체.
-          분할 화면 세팅 안내 문구는 운영자가 하루 시작 시 한 번 하는 작업이라 체험자용 화면에서는 뺐다. */}
+      {/* 왼쪽 사이드바 — 도메인 정보 카드(정적, 애니메이션 없음) + 채팅 시작 버튼.
+          버튼을 누르면 바로 채팅이 열리는 게 아니라 분할 뷰 안내 모달이 뜬다. */}
       <aside className="flex flex-col gap-3 lg:sticky lg:top-24 lg:w-80 lg:shrink-0">
         <p className="font-mono text-xs tracking-[0.2em] text-brand-green">PLAYGROUND</p>
-        <AgentChatCard domain={domain} onStartChat={handleStartChat} />
+        <AgentChatCard domain={domain} onOpenGuide={() => setGuideOpen(true)} />
+        <SplitViewGuideModal
+          open={guideOpen}
+          onClose={() => setGuideOpen(false)}
+          agentChatUrl={domain.agentChatUrl}
+          onOpenChat={handleStartChat}
+        />
       </aside>
 
       {/* 오른쪽 본문 — 상단 완료바 + 단계별 아코디언 카드 */}

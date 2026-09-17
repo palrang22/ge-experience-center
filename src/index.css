@@ -270,3 +270,47 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/*
+ * 페이지 좌우 슬라이딩 트랜지션
+ * 상단 탭바 인디케이터가 오른쪽으로 갈 때(홈/아키텍처 -> 체험하기) 새 페이지가 오른쪽에서 왼쪽으로 슬라이드 인
+ * 상단 탭바 인디케이터가 왼쪽으로 갈 때(체험하기 -> 홈/아키텍처) 새 페이지가 왼쪽에서 오른쪽으로 슬라이드 인
+ */
+.page-slide-from-right {
+  animation: page-slide-from-right-kf 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.page-slide-from-left {
+  animation: page-slide-from-left-kf 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+@keyframes page-slide-from-right-kf {
+  0% {
+    opacity: 0.1;
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes page-slide-from-left-kf {
+  0% {
+    opacity: 0.1;
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-slide-from-right,
+  .page-slide-from-left {
+    animation: none;
+  }
+}

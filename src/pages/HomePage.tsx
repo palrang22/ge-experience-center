@@ -9,7 +9,7 @@ function HomePage() {
         <span className="hero-aurora-blob hero-aurora-blob--green" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 px-6 py-24 text-center md:py-50">
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 px-6 py-24 text-center md:py-70">
         <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface-1 px-4 py-1.5 font-mono text-[11px] tracking-[0.2em] text-text-secondary">
           GEMINI ENTERPRISE · EXPERIENCE CENTER
         </span>

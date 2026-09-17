@@ -58,7 +58,7 @@ MegazoneSoft가 사내/고객 대상으로 **Gemini Enterprise(GE) Agent를 체�
 
 - Vite + React 19 + TypeScript, `react-router-dom` v7 (라우팅), Tailwind CSS v4
 - 테스트: Vitest + Testing Library (`npm test`), 린트: ESLint (`npm run lint`), 포맷: Prettier (`npm run format`)
-- 홈/도메인 체험/AI 아키텍처/데모 플레이그라운드까지 Phase 0~5.2가 구현 완료된 상태(2026-09-17 기준). `docs`/`plan.md` 참조. `/architecture`만 아직 placeholder(Phase 8에서 시안 A/B 확정 예정). 참고 사이트의 소스코드는 이 리포에 없다(별도 배포물이며, 이번 작업은 "새로 설계해서 만드는 것"이다).
+- 홈/도메인 체험/AI 아키텍처/데모 플레이그라운드까지 Phase 0~5.4 및 Phase 8 구현 완료(2026-09-17 기준). `docs`/`plan.md` 참조. `/architecture`는 옵션 1(3D Canvas)과 옵션 2(파이프라인 플로우)를 상단 토글로 둘 다 제공하여 비교 가능. Phase 6(타임아웃) 및 Phase 7(라이트 테마)은 보류.
 - `pretendard` npm 패키지로 폰트를 자체 호스팅한다(CDN 아님). **이 리포는 `pnpm` 기반이라 새 패키지 추가 시 `npm install`이 아니라 `pnpm add`를 써야 한다** — 섞어 쓰면 arborist 오류로 `node_modules`가 깨진다(실제로 한 번 겪음).
 
 ## 작업 컨벤션

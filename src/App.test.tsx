@@ -36,9 +36,7 @@ describe('App', () => {
     renderApp('/experience')
     const user = userEvent.setup()
     await user.click(screen.getByRole('link', { name: /제조 & 스마트 팩토리/ }))
-    expect(
-      screen.getByRole('heading', { name: /제조 & 스마트 팩토리 데모 체험/ }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '제조 & 스마트 팩토리' })).toBeInTheDocument()
   })
 
   it('shows a not-found message for an unknown domain id', () => {
