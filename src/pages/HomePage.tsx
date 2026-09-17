@@ -9,7 +9,7 @@ function HomePage() {
         <span className="hero-aurora-blob hero-aurora-blob--green" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 px-6 py-24 text-center md:py-30">
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 px-6 py-24 text-center md:py-50">
         <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface-1 px-4 py-1.5 font-mono text-[11px] tracking-[0.2em] text-text-secondary">
           GEMINI ENTERPRISE · EXPERIENCE CENTER
         </span>
@@ -37,9 +37,12 @@ function HomePage() {
           </Link>
           <Link
             to="/experience"
-            className="rounded-full bg-gradient-to-r from-brand-blue to-brand-purple px-6 py-3 text-sm font-semibold text-white shadow-[0_0_24px_-6px_rgba(137,32,255,0.55)] transition-opacity hover:opacity-90"
+            className="group rounded-full bg-gradient-to-r from-brand-blue to-brand-purple px-6 py-3 text-sm font-semibold text-white shadow-[0_0_24px_-6px_rgba(137,32,255,0.55)] transition-opacity hover:opacity-90"
           >
-            체험하기 →
+            체험하기{' '}
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </Link>
         </div>
       </div>
