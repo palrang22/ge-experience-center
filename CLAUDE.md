@@ -48,17 +48,39 @@ MegazoneSoft가 사내/고객 대상으로 **Gemini Enterprise(GE) Agent를 체�
 - **데모 첨부 파일**: ~~기존 파일을 그대로 쓰지 않고, 축소된 3~4단계 시나리오에 맞게 일부 새로 제작/편집한다~~ → **Phase 5에서 뒤집힘**: 원본 사이트의 실제 첨부파일이 그대로 존재함을 확인해서, 신규 제작 없이 원본 23개 파일을 그대로 `public/demo-data/<domainId>/`에 다운로드해서 재사용했다(회사명/지명 리브랜딩도 안 함, Vision 이미지 개수도 원본 그대로 2개 유지 — `docs/consent-docs/2026-09-17-phase5-decisions.md`).
 - **테마/컬러**: 위 "디자인 방향" 항목 참조.
 
+## 신규 기능 — "에이전트 만들기"(`/generate`, 자사 도메인 스크립트 생성 체험) (2026-09-21 결정)
+
+기존 체험(`/experience` → `/playground/:domainId`)은 **미리 만들어둔 6개 도메인 에이전트를 테스트**하는 것만 가능했다. 여기에 **체험객이 자기 회사 도메인을 직접 입력해서 그 회사에 맞는 에이전트를 생성하는 스크립트를 뽑아보는 체험**을 추가한다. 상단 네비게이션에 4번째 메뉴 "에이전트 만들기"로 이미 추가됨(`AppLayout.tsx`), 라우트 `/generate`도 `App.tsx`에 등록되고 `GeneratePage.tsx`가 "준비 중입니다" 플레이스홀더로 이미 스캐폴딩되어 있다(현재 작업 트리, 미커밋).
+
+- **실제 체험은 외부 사이트에서 이루어진다**: Google Apps Script 웹앱(`https://script.google.com/a/macros/mz.co.kr/s/.../exec`, 이하 "GE Demo Generator"). 회사 도메인을 입력하면 그 회사 프로필/업무 과제를 리서치하고, 자동화 대상 워크플로우를 고르게 한 뒤, 그 회사 전용 합성 데이터 + 에이전트 배포 스크립트(Cloud Shell용 `.sh`)와 첨부파일, 그리고 "추천 데모 진행 순서(맞춤 프롬프트)"까지 만들어주는 도구다. **UI가 전부 영어라 체험객에게는 한국어 가이드가 필요하다** — 이게 이번 기능의 핵심.
+- **화면 연동 방식은 기존 채팅 연동과 동일하게 재사용한다.** iframe 불가(X-Frame-Options) 판단은 이미 Phase 1에서 끝났고, 이 외부 사이트도 같은 제약이 있다고 가정 — 새로 스파이크하지 않고 바로 **Chrome split view + `SplitViewGuideModal` 재사용**으로 간다.
+  - 왼쪽: `AgentChatCard`와 같은 형태의 정적 카드 + "시작" CTA 버튼. 버튼을 누르면 `SplitViewGuideModal`이 뜬다(수정 없이 그대로 재사용 가능 — 이 컴포넌트는 이미 `agentChatUrl`/`onOpenChat` prop만 받는 범용 컴포넌트라 GE Demo Generator URL을 그대로 넘기면 된다).
+  - 모달을 닫으면(×) 화면 하단 split view 영역에서 체험객이 실제 GE Demo Generator 화면을 조작할 수 있다.
+- **오른쪽 가이드 콘텐츠가 기존과 다른 점**: 기존 `/playground/:domainId`는 "복사해서 채팅창에 붙여넣을 프롬프트"가 단계 콘텐츠였다. 여기는 **그 외부 사이트를 어떻게 조작하면 되는지, 해당 화면의 스크린샷 + 한국어 설명**이 단계 콘텐츠다. 체험객은 그 설명을 읽으며 화면 하단(split view)의 실제 영어 사이트에서 직접 따라 클릭/입력한다 — 프롬프트 복사 개념이 아니라 **조작 가이드**.
+- **스크린샷 자료 확보 완료**: `public/demo-generator-guide/demo-generator-1.png` ~ `-10.png`(총 10장, 실제 GE Demo Generator 화면을 순서대로 캡처). 실제 도구의 흐름은 다음과 같이 확인됨(1~10 원본 스텝):
+  1. Step 1: Define Business Challenge — 타겟 페르소나 선택(옵션) + "Customer Domain" 입력창에 회사 도메인 입력 후 RESEARCH, 또는 갤러리에서 선택/직접 입력
+  2. 리서치 결과 — 회사 프로필 + Business Challenges + Agent-Automatable Workflows 체크리스트 → Apply Selected Workflows
+  3. 생성된 Business Scenario 미리보기 → "Synthesizing..." (Cloud Shell용 `.sh` 스크립트 생성 시작)
+  4~6. Logic Synthesis & Compilation 진행 화면(합성 데이터/배포 번들 진행률, Google Cloud 아키텍처 다이어그램, 실시간 로그)
+  7~8. 합성된 데이터 프리뷰(Clients/Cloud Services/Engineering Staff/Migration RFP Projects 등 테이블) + 데이터 아키텍처 관계도
+  9. External Domain Files — 첨부파일(PDF/Excel/이미지) 다운로드 카드
+  10. Recommended Demo Flow — 이 회사 맞춤 프롬프트 4단계(Watch 포인트 포함)
+  - 원본 사이트 10단계를 **기존 프로젝트 원칙("3~4단계로 축소")에 맞춰 4단계 정도로 압축한 한국어 가이드**로 재구성하는 걸 권장(가안: ①도메인 입력·리서치 ②워크플로우 선택·시나리오 생성 ③스크립트 컴파일 진행 확인 ④결과물 다운로드·추천 데모 실행) — **정확한 단계 수/문구는 아직 확정 아님, 실제 구현 전 확인 필요**.
+- **구현 시 재사용/신규 판단**: `SplitViewGuideModal`은 그대로 재사용. `ScenarioStepCard`는 프롬프트 복사/첨부파일 배지 등 기존 도메인 시나리오 전용 구조라 그대로 못 쓰고, "스크린샷 + 한국어 설명 + 완료 체크"만 있는 새 컴포넌트(가칭 `GeneratorStepCard`)와 새 데이터 파일(가칭 `src/data/generatorGuide.ts`)이 필요할 걸로 예상.
+- **미확정/리스크**: GE Demo Generator URL이 `mz.co.kr` 사내 Google 계정 인증을 요구할 가능성이 있음(Apps Script의 `/a/macros/mz.co.kr/` 경로가 도메인 제한 배포임을 시사) — 이 경우 외부 체험객이 직접 로그인할 수 없으므로 **키오스크 브라우저에 사내 계정으로 미리 로그인해두는 운영 절차**가 Chrome split view 수동 셋업(Phase 1 참조)처럼 하루 시작 시 필요할 수 있다. 실측 확인 전까지는 가정으로만 남겨둠.
+
 ## 더 확인이 필요한 것
 
 - 아키텍처 화면의 최종 시안(A vs B)은 두 개를 실제로 만들어 비교한 뒤 결정한다(위 참조).
 - `window.open(url, 'ge-chat-pane')`으로 split view 탭을 내비게이션했을 때 분할이 유지되는지 실측 미검증 — Phase 9 QA 또는 키오스크 셋업 리허설에서 반드시 확인.
+- "에이전트 만들기"(`/generate`) 가이드의 정확한 단계 수/캡션 문구, `GE Demo Generator` URL의 `mz.co.kr` 계정 인증 여부·운영 절차는 위 "신규 기능" 항목 참조 — 실제 구현 전 확인 필요.
 - 그 외 새로 발견되는 결정 대기 항목은 `docs/consent-docs/`에 새 문서로 추가한다.
 
 ## 기술 스택
 
 - Vite + React 19 + TypeScript, `react-router-dom` v7 (라우팅), Tailwind CSS v4
 - 테스트: Vitest + Testing Library (`npm test`), 린트: ESLint (`npm run lint`), 포맷: Prettier (`npm run format`)
-- 홈/도메인 체험/AI 아키텍처/데모 플레이그라운드까지 Phase 0~5.4 및 Phase 8 구현 완료(2026-09-17 기준). `docs`/`plan.md` 참조. `/architecture`는 옵션 1(3D Canvas)과 옵션 2(파이프라인 플로우)를 상단 토글로 둘 다 제공하여 비교 가능. Phase 6(타임아웃) 및 Phase 7(라이트 테마)은 보류.
+- 홈/도메인 체험/AI 아키텍처/데모 플레이그라운드까지 Phase 0~5.4 및 Phase 8 구현 완료(2026-09-17 기준). `docs`/`plan.md` 참조. `/architecture`는 옵션 1(3D Canvas)과 옵션 2(파이프라인 플로우)를 상단 토글로 둘 다 제공하여 비교 가능. Phase 6(타임아웃) 및 Phase 7(라이트 테마)은 보류. Phase 10("에이전트 만들기" `/generate`)은 스캐폴딩만 된 상태(2026-09-21) — `plan.md` Phase 10 참조.
 - `pretendard` npm 패키지로 폰트를 자체 호스팅한다(CDN 아님). **이 리포는 `pnpm` 기반이라 새 패키지 추가 시 `npm install`이 아니라 `pnpm add`를 써야 한다** — 섞어 쓰면 arborist 오류로 `node_modules`가 깨진다(실제로 한 번 겪음).
 
 ## 작업 컨벤션

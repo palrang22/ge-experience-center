@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom'
 
 function HomePage() {
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden border-b border-border/60">
+    <section className="relative flex flex-1 flex-col overflow-hidden border-b border-border/60">
       <div aria-hidden="true" className="hero-aurora">
         <span className="hero-aurora-blob hero-aurora-blob--blue" />
         <span className="hero-aurora-blob hero-aurora-blob--purple" />
         <span className="hero-aurora-blob hero-aurora-blob--green" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-10 px-6 py-24 text-center md:py-70">
+      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center gap-10 px-6 py-16 text-center">
         <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface-1 px-4 py-1.5 font-mono text-[11px] tracking-[0.2em] text-text-secondary">
           GEMINI ENTERPRISE · EXPERIENCE CENTER
         </span>
