@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from '@/layouts/AppLayout'
 import ArchitecturePage from '@/pages/ArchitecturePage'
 import ExperiencePage from '@/pages/ExperiencePage'
+import GeneratePage from '@/pages/GeneratePage'
 import HomePage from '@/pages/HomePage'
 import PlaygroundPage from '@/pages/PlaygroundPage'
 
@@ -12,6 +13,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="architecture" element={<ArchitecturePage />} />
         <Route path="experience" element={<ExperiencePage />} />
+        <Route path="generate" element={<GeneratePage />} />
         <Route path="playground/:domainId" element={<PlaygroundPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

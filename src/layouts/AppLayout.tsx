@@ -4,7 +4,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 const NAV_ITEMS = [
   { id: 'home', to: '/', label: '홈' },
   { id: 'architecture', to: '/architecture', label: 'AI 아키텍처' },
-  { id: 'experience', to: '/experience', label: '체험' },
+  { id: 'experience', to: '/experience', label: '에이전트 사용해보기' },
+  { id: 'generate', to: '/generate', label: '에이전트 만들기' },
 ] as const
 
 const textClass = (isActive: boolean) =>
@@ -13,7 +14,8 @@ const textClass = (isActive: boolean) =>
   }`
 
 function getRouteOrder(pathname: string): number {
-  if (pathname.startsWith('/playground')) return 3
+  if (pathname.startsWith('/playground')) return 4
+  if (pathname.startsWith('/generate')) return 3
   if (pathname.startsWith('/experience')) return 2
   if (pathname.startsWith('/architecture')) return 1
   return 0 // '/'
@@ -47,7 +49,13 @@ function AppLayout() {
   const isExperienceActive =
     location.pathname.startsWith('/experience') || location.pathname.startsWith('/playground')
 
-  const activeIndex = isExperienceActive ? 2 : location.pathname === '/architecture' ? 1 : 0
+  const activeIndex = isExperienceActive
+    ? 2
+    : location.pathname === '/architecture'
+      ? 1
+      : location.pathname === '/generate'
+        ? 3
+        : 0
 
   const navRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<(HTMLElement | null)[]>([])
@@ -78,7 +86,10 @@ function AppLayout() {
     blob.classList.add('nav-blob-squish')
   }, [activeIndex])
 
-  const handleNavClick = (id: 'home' | 'architecture' | 'experience', e: React.MouseEvent) => {
+  const handleNavClick = (
+    id: 'home' | 'architecture' | 'experience' | 'generate',
+    e: React.MouseEvent,
+  ) => {
     if (id === 'home' && location.pathname === '/') {
       e.preventDefault()
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -134,10 +145,10 @@ function AppLayout() {
         </div>
       </header>
 
-      <main className="relative z-0 flex-1 overflow-x-hidden">
+      <main className="relative z-0 flex flex-1 flex-col overflow-x-hidden">
         <div
           key={location.pathname}
-          className={`min-h-full w-full ${slideAnim}`}
+          className={`flex w-full flex-1 flex-col ${slideAnim}`}
           onAnimationEnd={() => setSlideAnim('')}
         >
           <Outlet />

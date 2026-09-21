@@ -4,17 +4,17 @@ type Step = { image: string; alt: string; desc: string }
 
 const STEPS: Step[] = [
   {
-    image: '/guide/splitview-guide-1.png',
+    image: '/splitview-guide/splitview-guide-1.png',
     alt: '우클릭 메뉴에서 분할 뷰에서 링크 열기 선택',
     desc: "아래 버튼을 마우스 우클릭하면 나오는 메뉴에서 '분할 뷰에서 링크 열기'를 선택하세요.",
   },
   {
-    image: '/guide/splitview-guide-2.png',
+    image: '/splitview-guide/splitview-guide-2.png',
     alt: '분할 아이콘에서 스택형으로 표시 선택',
     desc: "주소창 왼쪽의 분할 아이콘을 눌러 '스택형으로 표시'를 선택하세요.",
   },
   {
-    image: '/guide/splitview-guide-3.png',
+    image: '/splitview-guide/splitview-guide-3.png',
     alt: '닫기를 누르고 오른쪽 가이드 1번부터 진행',
     desc: '이 안내창을 닫고, 오른쪽 가이드의 1번부터 진행해주세요.',
   },
