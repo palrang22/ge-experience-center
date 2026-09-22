@@ -82,23 +82,29 @@ function GeneratorStepCard({ step, completed, onToggleComplete }: Props) {
       >
         <div className="overflow-hidden">
           <div className="flex flex-col gap-5 border-t border-border/60 p-5 pt-5">
-            <div className={`grid gap-3 ${step.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-              {step.images.map((image) => (
+            <div className="flex flex-col gap-4">
+              {step.images.map((image, idx) => (
                 <div
-                  key={image}
+                  key={`${image}-${idx}`}
                   className="overflow-hidden rounded-md border border-border bg-surface-2"
                 >
-                  <img src={image} alt={step.title} className="w-full" />
+                  <img src={image} alt={`${step.title} ${idx + 1}`} className="w-full" />
                 </div>
               ))}
             </div>
 
-            <p className="text-sm leading-relaxed text-text-secondary">{step.desc}</p>
+            <p className="whitespace-pre-line text-base leading-relaxed text-text-primary">
+              {step.desc}
+            </p>
 
-            <div className="flex flex-col gap-2 rounded-md border-l-4 border-solid bg-surface-2 p-4 [border-image:linear-gradient(180deg,var(--color-brand-blue),var(--color-brand-purple))_1]">
-              <p className="font-mono text-[11px] tracking-[0.1em] text-brand-blue">확인 포인트</p>
-              <p className="text-base leading-relaxed text-text-primary">{step.watch}</p>
-            </div>
+            {step.watch ? (
+              <div className="flex flex-col gap-2 rounded-md border-l-4 border-solid bg-surface-2 p-4 [border-image:linear-gradient(180deg,var(--color-brand-blue),var(--color-brand-purple))_1]">
+                <p className="font-mono text-[11px] tracking-[0.1em] text-brand-blue">
+                  확인 포인트
+                </p>
+                <p className="text-base leading-relaxed text-text-primary">{step.watch}</p>
+              </div>
+            ) : null}
 
             <button
               type="button"

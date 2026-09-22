@@ -37,8 +37,7 @@ function GeneratorIntroCard({ onOpenGuide }: { onOpenGuide: () => void }) {
         </div>
         <p className="text-sm leading-relaxed text-text-secondary">
           내가 소개하고 싶은 회사의 도메인만 입력하면, 그 회사 업무에 맞춘 합성 데이터와 에이전트
-          배포 스크립트를 자동으로 만들어 줍니다. 화면은 전부 영어라 오른쪽 가이드를 따라 진행하면
-          됩니다.
+          배포 스크립트를 자동으로 만들어 줍니다. 오른쪽 가이드를 따라 진행해 보세요.
         </p>
         <div className="mt-auto flex flex-wrap gap-1.5">
           {KEYWORDS.map((keyword) => (
