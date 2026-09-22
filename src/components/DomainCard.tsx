@@ -95,7 +95,7 @@ function DomainCard({ domain }: { domain: Domain }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ '--c1': glow.c1, '--c2': glow.c2 } as CSSProperties}
-      className={`tilt-card group flex flex-[0_0_clamp(300px,31%,400px)] snap-start flex-col gap-5 rounded-2xl border border-border bg-surface-1 p-6 transition-colors ${accentBorderHover[domain.accent]}`}
+      className={`tilt-card group flex w-full flex-col gap-5 rounded-2xl border border-border bg-surface-1 p-6 transition-colors ${accentBorderHover[domain.accent]}`}
     >
       <DomainCardContent domain={domain} cta={<span className={CTA_CLASS}>체험하기 →</span>} />
     </Link>

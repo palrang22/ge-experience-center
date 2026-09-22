@@ -1,31 +1,36 @@
-import { useRef } from 'react'
 import DomainCard from '@/components/DomainCard'
 import { domains } from '@/data/domains'
 
 function Step({ number, title, desc }: { number: string; title: string; desc: string }) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-border bg-surface-1 p-6">
-      <span className="font-mono text-sm text-text-secondary">{number}</span>
-      <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
+    <div className="flex w-full flex-col items-center gap-2 rounded-xl border border-border bg-surface-1 p-5 text-center transition-colors hover:border-brand-green/40">
+      <span className="rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 font-mono text-xs text-brand-green">
+        STEP {number}
+      </span>
+      <h3 className="text-base font-semibold text-text-primary sm:text-lg">{title}</h3>
       <p className="text-sm text-text-secondary">{desc}</p>
     </div>
   )
 }
 
 function ExperiencePage() {
-  const railRef = useRef<HTMLDivElement>(null)
-
-  function scrollRail(direction: 1 | -1) {
-    railRef.current?.scrollBy({ left: direction * 420, behavior: 'smooth' })
-  }
-
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-16 px-6 py-16">
-      <section className="flex flex-col gap-6">
-        <p className="font-mono text-xs tracking-[0.2em] text-brand-green">
-          01 · HOW TO EXPERIENCE
-        </p>
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+    <div className="mx-auto flex max-w-5xl flex-col gap-16 px-8 py-16 sm:px-12 md:px-16">
+      {/* 01 · 상단 가이드: 가운데 정렬 & 세로 적층 배치 */}
+      <section className="flex flex-col items-center gap-6 text-center">
+        <div className="flex flex-col items-center gap-2">
+          <p className="font-mono text-xs tracking-[0.2em] text-brand-green">
+            01 · HOW TO EXPERIENCE
+          </p>
+          <h2 className="text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
+            에이전트 체험 방법
+          </h2>
+          <p className="max-w-md text-sm text-text-secondary">
+            간단한 3단계를 통해 엔터프라이즈 AI 에이전트를 직접 경험해보세요.
+          </p>
+        </div>
+
+        <div className="flex w-full max-w-xl flex-col gap-4">
           <Step number="01" title="도메인 선택" desc="관심 있는 산업의 에이전트를 고릅니다." />
           <Step
             number="02"
@@ -40,44 +45,19 @@ function ExperiencePage() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-6 border-t border-border/60 pt-16">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <p className="font-mono text-xs tracking-[0.2em] text-brand-blue">02 · DOMAINS</p>
-            <h1 className="text-3xl font-semibold tracking-tight text-text-primary">
-              6개 산업 도메인
-            </h1>
-            <p className="text-text-secondary">
-              6개 산업 도메인의 에이전트를 체험할 수 있습니다. 카드를 선택하면 해당 에이전트의
-              데모로 이동합니다.
-            </p>
-          </div>
-          <div className="flex shrink-0 gap-2">
-            <button
-              type="button"
-              onClick={() => scrollRail(-1)}
-              aria-label="이전 도메인"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-brand-blue hover:text-brand-blue"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollRail(1)}
-              aria-label="다음 도메인"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-text-secondary transition-colors hover:border-brand-blue hover:text-brand-blue"
-            >
-              ›
-            </button>
-          </div>
+      {/* 02 · 하단 도메인 데모: 가로 2개씩 3줄(2x3 그리드) 배치 */}
+      <section className="flex flex-col items-center gap-8 border-t border-border/60 pt-16 text-center">
+        <div className="flex flex-col items-center gap-2">
+          <p className="font-mono text-xs tracking-[0.2em] text-brand-blue">02 · DOMAINS</p>
+          <h1 className="text-3xl font-semibold tracking-tight text-text-primary">
+            6개 산업 도메인
+          </h1>
+          <p className="max-w-md text-sm text-text-secondary">
+            카드를 선택하면 해당 에이전트의 데모로 이동합니다.
+          </p>
         </div>
-        {/* 원본 사이트(#domains)처럼 가로 스크롤 캐러셀 — 카드는 고정폭, 화면이 넓어져도 늘어나지 않고 옆으로 더 보인다. */}
-        {/* 스크롤바는 no-scrollbar로 숨김(스크롤 자체는 유지). overflow-x-auto를 걸면 overflow-y도 자동으로 clip되므로,
-            카드가 호버 시 위로 떠오르는 것(translateY -8px)과 글로우가 잘리지 않도록 위/아래에 여유 패딩을 둔다. */}
-        <div
-          ref={railRef}
-          className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 py-6"
-        >
+
+        <div className="grid w-full grid-cols-2 gap-5 text-left sm:gap-6">
           {domains.map((domain) => (
             <DomainCard key={domain.id} domain={domain} />
           ))}
