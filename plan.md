@@ -138,21 +138,25 @@ Phase 5.2 직후 "화면 가로폭 줄여도 1개로 보이게 하지 마, 최�
   - 5개 계층 간 그라데이션 스트림 커넥터와 펄스 화살표, 21개 세부 노드 그리드 카드, 상단 퀵 점프/필터 지원.
 - 상단 토글 버튼(`옵션 1 (3D 캔버스 뷰)` ↔ `옵션 2 (파이프라인 플로우 뷰)`)을 통해 사용자가 직접 두 시안을 눈으로 비교할 수 있게 함.
 
-## Phase 10 — "에이전트 만들기"(`/generate`): 자사 도메인 스크립트 생성 체험 (2026-09-21, 착수)
+## Phase 10 — "에이전트 만들기"(`/generate`): 자사 도메인 스크립트 생성 체험 (2026-09-21 착수, 2026-09-22 1차 구현 완료)
 
-기존 체험(6개 도메인 에이전트 테스트)과 별개로, **체험객이 자기 회사 도메인을 넣어서 그 회사 전용 에이전트를 만드는 스크립트를 뽑아보는 체험**을 추가한다. 상세 배경은 `CLAUDE.md`의 "신규 기능 — 에이전트 만들기" 섹션 참조. 여기는 구현 상태와 TODO만 추적한다.
+기존 체험(6개 도메인 에이전트 테스트)과 별개로, **체험객이 자기 회사 도메인을 넣어서 그 회사 전용 에이전트를 만드는 스크립트를 뽑아보는 체험**을 추가한다. 상세 배경은 `CLAUDE.md`의 "신규 기능 — 에이전트 만들기" 섹션 참조.
 
-- **현재 상태(작업 트리, 미커밋)**: `AppLayout.tsx`에 4번째 상단 메뉴 "에이전트 만들기"(`/generate`) 추가됨, `App.tsx`에 라우트 등록됨, `src/pages/GeneratePage.tsx`는 "준비 중입니다" 플레이스홀더. `public/demo-generator-guide/demo-generator-1.png` ~ `-10.png`(외부 GE Demo Generator 사이트 실제 화면 캡처 10장) 확보 완료.
 - 겸사겸사 `SplitViewGuideModal`의 스크린샷 경로가 `public/guide/` → `public/splitview-guide/`로 정리됨(`docs/design/splitview-guide-*.png`, `public/guide/splitview-guide-*.png` 삭제 → `public/splitview-guide/`로 통합), 컴포넌트 import 경로도 함께 수정됨 — 내용 변경 아닌 파일 위치 정리.
-- **외부 사이트**: Google Apps Script 웹앱(`https://script.google.com/a/macros/mz.co.kr/s/.../exec`). 도메인 입력 → 회사 리서치 → 자동화 워크플로우 선택 → 비즈니스 시나리오/Cloud Shell용 `.sh` 스크립트 생성 → 합성 데이터/아키텍처 다이어그램 확인 → 첨부파일 다운로드 → 맞춤 추천 데모 프롬프트 제공까지 이어지는 흐름(원본 10단계, 스크린샷으로 전부 캡처됨). UI가 영어라 한국어 가이드가 필요.
-- **연동 방식**: 새로 스파이크하지 않고 Phase 1에서 확정한 Chrome split view + `SplitViewGuideModal`을 그대로 재사용(이 컴포넌트는 URL만 받는 범용 컴포넌트라 수정 불필요). `openChatPane()`(`src/lib/chatPane.ts`)도 재사용 가능 — split view 아래쪽에 GE Demo Generator URL을 띄우는 용도로 그대로 쓰면 됨.
-- **TODO(구현 전 결정 필요)**:
-  1. 원본 10단계를 몇 단계로 압축할지 확정. 가안: 4단계(①도메인 입력·리서치 ②워크플로우 선택·시나리오 생성 ③스크립트 컴파일 진행 확인 ④결과물 다운로드·추천 데모 실행) — 기존 "3~4단계로 축소" 원칙과 일치시킨 제안일 뿐, 실제 캡션 문구/스크린샷 매핑은 아직 작성 안 됨.
-  2. 새 데이터 파일(가칭 `src/data/generatorGuide.ts`)에 압축된 단계별 {step, title, image, desc} 정의.
-  3. 새 컴포넌트(가칭 `GeneratorStepCard`) 작성 — 기존 `ScenarioStepCard`(프롬프트 복사/첨부파일 배지 중심)는 이 용도에 안 맞아 재사용 불가, 스크린샷 표시 + 한국어 설명 + 완료 체크만 있는 단순한 카드로 새로 만든다.
-  4. `GeneratePage.tsx`를 `PlaygroundPage.tsx`와 같은 좌(정적 카드 + 시작 버튼 + `SplitViewGuideModal`)/우(단계별 가이드 카드) 2단 레이아웃으로 채운다. 다만 좌측 카드는 도메인 정보(`Domain` 타입) 대신 "에이전트 만들기" 자체를 소개하는 고정 문구/아이콘이어야 하므로 `AgentChatCard`를 그대로 쓰기보다 비슷한 모양의 새 카드가 필요할 수 있음.
-  5. **GE Demo Generator URL의 `mz.co.kr` 계정 인증 여부 확인** — Apps Script 배포 경로(`/a/macros/mz.co.kr/`)가 도메인 제한 배포일 가능성이 있어, 외부 체험객이 직접 접근 못 할 수 있다. 인증이 필요하다면 키오스크 브라우저에 사내 계정으로 매일 미리 로그인해두는 운영 절차가 추가로 필요(Chrome split view 수동 셋업과 함께 운영 가이드에 포함).
-  6. 완료 후 QA(Phase 9)에 이 체험도 포함시켜야 함.
+- **외부 사이트**: Google Apps Script 웹앱(`https://script.google.com/a/macros/mz.co.kr/s/.../exec`). 도메인 입력 → 회사 리서치 → 자동화 워크플로우 선택 → 비즈니스 시나리오/Cloud Shell용 `.sh` 스크립트 생성 → 합성 데이터/아키텍처 다이어그램 확인 → 첨부파일 다운로드 → 맞춤 추천 데모 프롬프트 제공까지 이어지는 흐름(원본 10단계, `public/demo-generator-guide/demo-generator-1.png` ~ `-10.png`로 전부 캡처됨). UI가 영어라 한국어 가이드가 필요.
+- **연동 방식**: Phase 1에서 확정한 Chrome split view + `SplitViewGuideModal`을 그대로 재사용(수정 없음, URL만 GE Demo Generator로 교체). `openChatPane()`(`src/lib/chatPane.ts`)도 그대로 재사용.
+- **구현 완료 (2026-09-22)**:
+  1. 원본 10단계를 4단계로 압축(원본 스크린샷을 실제로 열어 내용 확인 후 매핑): ①회사 도메인 입력·리서치(`demo-generator-1`) ②워크플로우 선택·시나리오 생성(`-2`, `-3`) ③스크립트 컴파일 진행 확인(`-4`) ④첨부파일 다운로드·추천 데모 실행(`-9`, `-10`). 리서치 결과 화면(`-2`)과 데이터/아키텍처 프리뷰(`-6`~`-8`)는 3단계 설명 텍스트에서만 언급하고 스크린샷은 생략(임팩트 낮은 중간 확인 화면이라 압축 원칙에 따라 제외).
+  2. `src/data/generatorGuide.ts` 신설 — `GeneratorStep = {step, title, images, desc, watch}`. `images`는 단계당 1~2장(첨부파일/추천 프롬프트 단계는 2장을 나란히 보여줌).
+  3. `src/components/GeneratorStepCard.tsx` 신설 — `ScenarioStepCard`와 아코디언/완료 체크/상태별 글로우 테두리는 동일한 시각 구조를 쓰되, 프롬프트 복사·첨부파일 배지 대신 스크린샷 그리드 + 설명 + "확인 포인트"로 내용만 교체.
+  4. `src/components/GeneratorIntroCard.tsx` 신설 — `AgentChatCard`/`DomainCardContent`와 같은 카드 골격(아이콘 배지·설명 카드·키워드 칩)을 쓰되 `Domain` 타입에 의존하지 않는 고정 문구 버전. 아이콘은 새로 추가한 `WandIcon`(`src/components/icons/DomainIcons.tsx`, 기존 라인스트로크 아이콘과 동일 스타일).
+  5. `GeneratePage.tsx`를 `PlaygroundPage.tsx`와 동일한 좌(소개 카드+시작 버튼+`SplitViewGuideModal`)/우(4단계 가이드 카드 + 진행바) 2단 레이아웃으로 교체.
+  6. `npm run lint`, `tsc --noEmit` 통과 확인. **브라우저 실사용 확인은 못함** — 이 세션의 크롬 확장이 이 Windows 머신이 아니라 사용자의 맥북 브라우저에 연결되어 있어서(로컬 5174 포트가 그쪽엔 없어 계속 에러 페이지) 중단함. 사용자가 직접 `npm run dev` 후 `/generate`에서 확인 필요.
+- **미해결 TODO**:
+  1. ~~GE Demo Generator 실제 URL 미확정~~ → **해결(2026-09-22)**: 사용자가 실제 배포 URL을 알려줘서 `GeneratePage.tsx`의 `GE_DEMO_GENERATOR_URL`에 반영함.
+  2. **`mz.co.kr` 계정 인증 여부 확인** — Apps Script 배포 경로(`/a/macros/mz.co.kr/`)가 도메인 제한 배포일 가능성이 있어, 외부 체험객이 직접 접근 못 할 수 있다. 인증이 필요하다면 키오스크 브라우저에 사내 계정으로 매일 미리 로그인해두는 운영 절차가 Chrome split view 수동 셋업과 함께 필요.
+  3. 압축된 4단계 캡션 문구(`generatorGuide.ts`)는 스크린샷을 보고 작성한 1차 초안 — 실제 외부 사이트 UI가 캡처 시점과 달라졌는지 실사용 시 재확인 필요.
+  4. 완료 후 QA(Phase 9)에 이 체험도 포함시켜야 함.
 
 ## 병렬 작업 가능 항목 (다른 터미널에서 동시 진행 가능)
 

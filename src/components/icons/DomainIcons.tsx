@@ -87,3 +87,17 @@ export function ClockIcon(props: IconProps) {
     </svg>
   )
 }
+
+export function WandIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 20 15 9" />
+      <path d="M13 4.5v3" />
+      <path d="M11.5 6h3" />
+      <path d="M19 8.5v2.4" />
+      <path d="M17.8 9.7h2.4" />
+      <path d="M17 15.5v2.2" />
+      <path d="M15.9 16.6h2.2" />
+    </svg>
+  )
+}
