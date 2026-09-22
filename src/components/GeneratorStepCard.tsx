@@ -41,6 +41,94 @@ type Props = {
 
 // ScenarioStepCard와 시각 구조(상태별 테두리/글로우, 아코디언, 완료 체크)를 공유하되,
 // 콘텐츠는 프롬프트/첨부파일이 아니라 "외부 사이트 조작 가이드"(스크린샷 + 한국어 설명)다.
+function renderInline(text: string) {
+  const tokens = text.split(/(\*\*[^*]+\*\*|'[^']+')/g)
+  return tokens.map((token, i) => {
+    if (token.startsWith('**') && token.endsWith('**')) {
+      return (
+        <strong key={i} className="font-semibold text-text-primary">
+          {token.slice(2, -2)}
+        </strong>
+      )
+    }
+    if (token.startsWith("'") && token.endsWith("'")) {
+      return (
+        <kbd
+          key={i}
+          className="mx-1 inline-flex items-center rounded-md border border-sky-400/50 bg-sky-500/15 px-2 py-0.5 font-mono text-[13px] font-bold tracking-wide text-sky-200 shadow-[0_0_10px_-2px_rgba(56,189,248,0.35)]"
+        >
+          {token.slice(1, -1)}
+        </kbd>
+      )
+    }
+    return token
+  })
+}
+
+function GuideDesc({ desc }: { desc: string }) {
+  const lines = desc.split('\n').filter((line) => line.trim().length > 0)
+
+  return (
+    <div className="flex flex-col gap-2.5">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim()
+
+        const numMatch = trimmed.match(/^(\d+)\.\s*(.+)$/)
+        if (numMatch) {
+          const [, num, content] = numMatch
+          return (
+            <div
+              key={idx}
+              className="flex items-start gap-3 rounded-lg border border-border/70 bg-surface-2/80 p-3.5 transition-colors hover:border-brand-blue/40"
+            >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-brand-blue to-brand-purple font-mono text-xs font-bold text-white shadow-[0_0_8px_-1px_rgba(65,74,255,0.5)]">
+                {num}
+              </span>
+              <p className="flex-1 text-[15px] leading-relaxed text-text-primary">
+                {renderInline(content)}
+              </p>
+            </div>
+          )
+        }
+
+        if (trimmed.startsWith('💡') || trimmed.startsWith('팁:')) {
+          return (
+            <div
+              key={idx}
+              className="flex items-start gap-3 rounded-lg border border-brand-green/30 bg-brand-green/10 p-3.5"
+            >
+              <span className="shrink-0 text-base">💡</span>
+              <div className="flex-1 text-sm leading-relaxed text-text-primary">
+                {renderInline(trimmed.replace(/^(💡|팁:?)\s*/, ''))}
+              </div>
+            </div>
+          )
+        }
+
+        if (trimmed.startsWith('⏱️') || trimmed.includes('소요 시간')) {
+          return (
+            <div
+              key={idx}
+              className="flex items-center gap-2.5 rounded-lg border border-brand-blue/30 bg-brand-blue/10 px-3.5 py-2.5"
+            >
+              <span className="text-base">⏱️</span>
+              <span className="text-sm font-medium text-text-primary">
+                {renderInline(trimmed.replace(/^⏱️\s*/, ''))}
+              </span>
+            </div>
+          )
+        }
+
+        return (
+          <p key={idx} className="text-[15px] leading-relaxed text-text-primary">
+            {renderInline(trimmed)}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
 function GeneratorStepCard({ step, completed, onToggleComplete }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -93,9 +181,7 @@ function GeneratorStepCard({ step, completed, onToggleComplete }: Props) {
               ))}
             </div>
 
-            <p className="whitespace-pre-line text-base leading-relaxed text-text-primary">
-              {step.desc}
-            </p>
+            <GuideDesc desc={step.desc} />
 
             {step.watch ? (
               <div className="flex flex-col gap-2 rounded-md border-l-4 border-solid bg-surface-2 p-4 [border-image:linear-gradient(180deg,var(--color-brand-blue),var(--color-brand-purple))_1]">

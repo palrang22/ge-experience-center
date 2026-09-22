@@ -19,39 +19,47 @@ export type GeneratorStep = {
 export const generatorSteps: GeneratorStep[] = [
   {
     step: 1,
-    title: '회사 도메인 입력 및 리서치',
+    title: '1. 회사 도메인 입력 및 리서치',
     images: ['/demo-generator-guide/demo-generator-1.png'],
-    desc: "빨갛게 표시된 'CUSTOMER DOMAIN' 입력창에 소개하고 싶은 회사의 도메인(예: example.co.kr)을 입력하고, Auto로 되어 있는 선택창에서 '한국어'를 찾아서 바꿔준 후 RESEARCH 버튼을 누르세요.\n\n아래 'Pick from Gallery'에서 미리 준비된 업종 템플릿을 골라도 됩니다.",
+    desc: `1. 빨갛게 표시된 'CUSTOMER DOMAIN' 입력창에 소개하고 싶은 회사의 도메인(예: example.co.kr)을 입력하세요.
+2. 'Auto'로 되어 있는 언어 선택창을 클릭하여 '한국어'로 변경해 주세요.
+3. 'RESEARCH' 버튼을 누르면 구글 기반 기업 리서치가 시작됩니다.
+
+💡 팁: 도메인이 바로 떠오르지 않는다면 아래 'Pick from Gallery'에서 미리 준비된 업종 템플릿을 선택해도 좋습니다.`,
   },
   {
     step: 2,
-    title: '자동화 워크플로우 선택 및 시나리오 생성',
-    images: [
-      '/demo-generator-guide/demo-generator-2.png',
-    ],
-    desc: "입력한 도메인에 대한 간단한 구글 리서치가 진행됩니다. 해당 내용을 읽어본 후, 다음 목록에서 데모로 보여주고 싶은 업무 워크플로우를 체크한 뒤 'APPLY SELECTED WORKFLOWS'를 누르세요.",
+    title: '2. 리서치 결과 확인 및 워크플로우 선택',
+    images: ['/demo-generator-guide/demo-generator-2.png'],
+    desc: `1. 입력한 도메인에 대해 자동으로 정리된 **구글 리서치 요약 결과**를 확인합니다.
+2. 'AGENT-AUTOMATABLE WORKFLOWS' 목록에서 데모로 시연하고 싶은 업무 워크플로우를 체크하세요.
+3. 선택 후 'APPLY SELECTED WORKFLOWS' 버튼을 눌러 다음 단계로 진행합니다.`,
   },
   {
     step: 3,
-    title: '자동화 워크플로우 선택 및 시나리오 생성',
-    images: [
-      '/demo-generator-guide/demo-generator-3.png',
-    ],
-    desc: "선택한 워크플로우를 반영한 비즈니스 시나리오 초안을 읽어본 후, 'GENERATE SETUP SCRIPT & ASSETS' 버튼을 눌러 스크립트와 에샛 생성을 시작하세요. 팝업창이 뜨면 버튼을 한 번 더 눌러 진행을 확인합니다.",
+    title: '3. 비즈니스 시나리오 확인 및 스크립트 생성 시작',
+    images: ['/demo-generator-guide/demo-generator-3.png'],
+    desc: `1. 선택한 워크플로우가 반영된 **비즈니스 시나리오 초안**을 확인하세요.
+2. 'GENERATE SETUP SCRIPT & ASSETS' 버튼을 눌러 스크립트 및 데이터 생성을 시작하세요.
+3. 팝업창이 나타나면 진행 확인 버튼을 한 번 더 눌러 최종 승인합니다.`,
   },
   {
     step: 4,
-    title: '스크립트 및 관련 에샛 생성중 화면 확인',
+    title: '4. 스크립트 및 관련 에셋 생성 진행 확인',
     images: ['/demo-generator-guide/demo-generator-4.png'],
-    desc: '회사에 맞는 가상 고객·설비·인력 데이터와 스크립트가 실시간 로그와 함께 자동 생성됩니다.\n3~4분 정도 소요됩니다.',
+    desc: `회사에 맞춤화된 가상 고객·설비·인력 데이터와 배포 스크립트(.sh)가 실시간 로그와 함께 자동 생성됩니다.
+
+⏱️ 예상 소요 시간: 약 3~4분 (완료될 때까지 잠시 화면을 지켜봐 주세요)`,
   },
   {
     step: 5,
-    title: '생성된 스크립트 확인 및 활용',
+    title: '5. 생성된 스크립트 확인 및 데모 프롬프트 실행',
     images: [
       '/demo-generator-guide/demo-generator-9.png',
       '/demo-generator-guide/demo-generator-10.png',
     ],
-    desc: "생성이 완료되면 스크롤을 내려 STEP 4를 바로 확인하세요.\n'EXTERNAL DOMAIN FILES'에서는 생성된 PDF·엑셀·이미지 첨부파일을 다운로드 할 수 있습니다. 이 파일들은 잠시 뒤 에이전트 채팅에서 직접 업로드해 사용합니다.\n그 아래 'RECOMMENDED DEMO FLOW'에는 이 회사 전용으로 맞춤 생성된 프롬프트가 준비되어 있습니다.",
+    desc: `1. 생성이 완료되면 화면을 아래로 스크롤하여 'STEP 4' 영역으로 이동하세요.
+2. 'EXTERNAL DOMAIN FILES'에서 생성된 첨부파일(PDF·엑셀·이미지)를 확인할 수 있습니다.
+3. 'RECOMMENDED DEMO FLOW'에서는 맞춤 생성된 프롬프트를 확인해볼 수 있습니다. 에이전트와 대화를 시작해 보세요!`,
   },
 ]

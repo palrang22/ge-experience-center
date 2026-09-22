@@ -1,4 +1,5 @@
 import { useEffect, type MouseEvent } from 'react'
+import { createPortal } from 'react-dom'
 
 type Step = { image: string; alt: string; desc: string }
 
@@ -48,19 +49,19 @@ function SplitViewGuideModal({
     onOpenChat()
   }
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4 sm:p-6 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         onClick={(event) => event.stopPropagation()}
-        className="flex w-full max-w-4xl flex-col gap-5 rounded-2xl border border-border bg-surface-1 p-6"
+        className="flex w-full max-w-4xl max-h-[92vh] flex-col rounded-2xl border border-border bg-surface-1 shadow-2xl overflow-hidden"
       >
-        <div className="flex items-start justify-between gap-4">
-          <h2 className="text-lg font-semibold text-text-primary">
+        <div className="flex items-center justify-between gap-4 border-b border-border/60 p-4 sm:p-5 shrink-0">
+          <h2 className="text-base sm:text-lg font-semibold text-text-primary">
             채팅을 화면 하단에 고정하는 방법
           </h2>
           <button
@@ -73,34 +74,46 @@ function SplitViewGuideModal({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {STEPS.map((step, index) => (
-            <div key={step.image} className="flex flex-col gap-3">
-              <div className="flex items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-2 p-3">
-                <img src={step.image} alt={step.alt} className="h-48 w-auto" />
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {STEPS.map((step, index) => (
+              <div key={step.image} className="flex flex-col gap-3">
+                <div className="flex items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-2 p-3">
+                  <img src={step.image} alt={step.alt} className="h-36 sm:h-44 md:h-48 w-auto" />
+                </div>
+                <p className="text-sm sm:text-base text-text-secondary">
+                  <span className="font-mono text-text-primary">{index + 1}.</span> {step.desc}
+                </p>
               </div>
-              <p className="text-base text-text-secondary">
-                <span className="font-mono text-text-primary">{index + 1}.</span> {step.desc}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-border/60 pt-4">
-          <p className="text-sm text-text-secondary">
-            아래 버튼을 우클릭해 <span className="text-text-primary">'분할 뷰에서 링크 열기'</span>
+        <div className="flex flex-col gap-2.5 border-t border-border/60 p-4 sm:p-5 shrink-0 bg-surface-1">
+          <p className="text-xs sm:text-sm text-text-secondary">
+            아래 버튼을 우클릭해 <span className="text-text-primary font-medium">'분할 뷰에서 링크 열기'</span>
             를 클릭하세요.
           </p>
-          <a
-            href={agentChatUrl}
-            onClick={handleLinkClick}
-            className="flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-brand-blue to-brand-purple py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            에이전트 채팅 시작
-          </a>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-5 py-3 rounded-full border border-border text-xs sm:text-sm font-medium text-text-secondary transition-colors hover:border-text-secondary hover:text-text-primary"
+            >
+              닫기
+            </button>
+            <a
+              href={agentChatUrl}
+              onClick={handleLinkClick}
+              className="flex-1 flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-brand-blue to-brand-purple py-3 text-xs sm:text-sm font-semibold text-white shadow-[0_0_16px_-4px_rgba(65,74,255,0.5)] transition-opacity hover:opacity-90"
+            >
+              에이전트 채팅 시작
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
