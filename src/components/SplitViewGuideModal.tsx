@@ -7,30 +7,58 @@ const STEPS: Step[] = [
   {
     image: '/splitview-guide/splitview-guide-1.png',
     alt: '우클릭 메뉴에서 분할 뷰에서 링크 열기 선택',
-    desc: "아래 버튼을 마우스 우클릭하면 나오는 메뉴에서 '분할 뷰에서 링크 열기'를 선택하세요.",
+    desc: "아래 버튼을 **마우스 우클릭**한 뒤 '분할 뷰에서 링크 열기'를 선택하세요.",
   },
   {
     image: '/splitview-guide/splitview-guide-2.png',
     alt: '분할 아이콘에서 스택형으로 표시 선택',
-    desc: "주소창 왼쪽의 분할 아이콘을 눌러 '스택형으로 표시'를 선택하세요.",
+    desc: "주소창 왼쪽의 **분할 아이콘**을 눌러 '스택형으로 표시'를 선택하세요.",
   },
   {
     image: '/splitview-guide/splitview-guide-3.png',
     alt: '닫기를 누르고 오른쪽 가이드 1번부터 진행',
-    desc: '이 안내창을 닫고, 오른쪽 가이드의 1번부터 진행해주세요.',
+    desc: "이 안내창을 닫고, 오른쪽 가이드의 **'1번'**부터 진행해주세요.",
   },
 ]
+
+function renderInline(text: string) {
+  const tokens = text.split(/(\*\*[^*]+\*\*|'[^']+')/g)
+  return tokens.map((token, i) => {
+    if (token.startsWith('**') && token.endsWith('**')) {
+      return (
+        <strong key={i} className="font-semibold text-white">
+          {token.slice(2, -2)}
+        </strong>
+      )
+    }
+    if (token.startsWith("'") && token.endsWith("'")) {
+      return (
+        <kbd
+          key={i}
+          className="mx-1 inline-flex items-center rounded-md border border-sky-400/50 bg-sky-500/15 px-2 py-0.5 font-mono text-xs sm:text-[13px] font-bold tracking-wide text-sky-200 shadow-[0_0_10px_-2px_rgba(56,189,248,0.35)]"
+        >
+          {token.slice(1, -1)}
+        </kbd>
+      )
+    }
+    return token
+  })
+}
 
 function SplitViewGuideModal({
   open,
   onClose,
   agentChatUrl,
   onOpenChat,
+  title = '채팅을 화면 하단에 고정하는 방법',
+  buttonText = '에이전트 채팅 시작',
 }: {
   open: boolean
   onClose: () => void
   agentChatUrl: string
   onOpenChat: () => void
+  title?: string
+  buttonText?: string
 }) {
   useEffect(() => {
     if (!open) return
@@ -62,7 +90,7 @@ function SplitViewGuideModal({
       >
         <div className="flex items-center justify-between gap-4 border-b border-border/60 p-4 sm:p-5 shrink-0">
           <h2 className="text-base sm:text-lg font-semibold text-text-primary">
-            채팅을 화면 하단에 고정하는 방법
+            {title}
           </h2>
           <button
             type="button"
@@ -81,8 +109,9 @@ function SplitViewGuideModal({
                 <div className="flex items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-2 p-3">
                   <img src={step.image} alt={step.alt} className="h-36 sm:h-44 md:h-48 w-auto" />
                 </div>
-                <p className="text-sm sm:text-base text-text-secondary">
-                  <span className="font-mono text-text-primary">{index + 1}.</span> {step.desc}
+                <p className="text-sm sm:text-base leading-relaxed text-text-primary">
+                  <span className="font-mono font-bold text-white mr-1.5">{index + 1}.</span>
+                  {renderInline(step.desc)}
                 </p>
               </div>
             ))}
@@ -90,9 +119,8 @@ function SplitViewGuideModal({
         </div>
 
         <div className="flex flex-col gap-2.5 border-t border-border/60 p-4 sm:p-5 shrink-0 bg-surface-1">
-          <p className="text-xs sm:text-sm text-text-secondary">
-            아래 버튼을 우클릭해 <span className="text-text-primary font-medium">'분할 뷰에서 링크 열기'</span>
-            를 클릭하세요.
+          <p className="text-xs sm:text-sm text-text-primary">
+            {renderInline("아래 버튼을 **마우스 우클릭**해 '분할 뷰에서 링크 열기'를 클릭하세요.")}
           </p>
           <div className="flex items-center gap-3">
             <button
@@ -107,7 +135,7 @@ function SplitViewGuideModal({
               onClick={handleLinkClick}
               className="flex-1 flex items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-brand-blue to-brand-purple py-3 text-xs sm:text-sm font-semibold text-white shadow-[0_0_16px_-4px_rgba(65,74,255,0.5)] transition-opacity hover:opacity-90"
             >
-              에이전트 채팅 시작
+              {buttonText}
             </a>
           </div>
         </div>

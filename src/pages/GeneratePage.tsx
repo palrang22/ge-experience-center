@@ -43,6 +43,8 @@ function GeneratePage() {
           onClose={() => setGuideOpen(false)}
           agentChatUrl={GE_DEMO_GENERATOR_URL}
           onOpenChat={handleStartChat}
+          title="에이전트 만들기를 화면 하단에 고정하는 방법"
+          buttonText="에이전트 만들기 시작"
         />
       </aside>
 
